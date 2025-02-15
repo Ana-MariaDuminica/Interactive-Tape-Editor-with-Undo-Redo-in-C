@@ -1,0 +1,89 @@
+Tema 1
+
+Duminica Ana-Maria 312CC
+
+Pentru implementarea acestei probleme am definit mai multe structuri. Pentru 
+crearea listei duble, sau benzii, am realizat o structura numita Nod ce contine 
+o variabila de tip char, caracterul ce se va adauga in fiecare nod si doi 
+pointeri next si prev de tip Nod. De asemenea, am creat si o structura de 
+tip Banda ce contine lista dubla de tip Nod si un pointer denumit finger ce imi 
+va arata pe ce pozitie sunt in lista. Am realizat si o structura pentru un nod 
+din coada numita Coadanod ce contine un string si un pointer catre urmatorul nod 
+de tip Coadanod si o structura numita Coada ce contine doi pointeri de tip 
+Coadanod, front si rear. Pentru stive am definit o structura numita Stivanod ce 
+contine un pointer de tip Nod si un pointer de tip Stivanod numit next. Pentru 
+undo am facut o structura numita Stiva_undo ce contine un pointer top de tip 
+Stivanod, iar pentru redo am facut o structura numita Stiva_redo ce contine un 
+pointer numit top de tip Stivanod.
+
+Functia "enqueue" este de tip void si are ca parametrii un pointer de tip 
+Coada si un string de tip char ce reprezinta operatia. Aceasta functie imi 
+adauga noua operatie de tip UPDATE in coada, creand un nod nou. Functia "delQ" 
+este de tip void si are ca parametrii un pointer de tip Coada, un pointer de 
+tip Banda, un pointer de tip Nod sentinel, fisierul text f, un pointer de tip 
+int a si o variabila de tip char op.
+
+Daca se apeleaza functia "delQ", atunci mai intai stergem prima operatie din 
+coada, retinand-o in pointerul temp. Dupa aceea cu un strcmp verificam ce tip 
+de operatie este pentru a fi executata. Pentru MOVE_RIGHT trecem la nodul urmator 
+din dreapta, iar daca urmatorul nod este nul, atunci cream unul nou. Pentru 
+MOVE_LEFT trecem la nodul din stanga fata de pozitia curenta, iar daca acesta 
+nu exista pozitia degetului ramane neschimbata. Pentru WRITE extrag ultimul 
+caracter din sir si il pun pe pozitia curenta din banda. Pentru aceste 3 operatii, 
+variabila a se modifica in 1 si copiez operatia in variabila op. Pentru 
+MOVE_RIGHT_CHAR creez o variabila de tip char in care pun ultimul caracter din 
+operatie. Caut la dreapta degetului cu un while simbolul prin lista cu ajutorul 
+cursorului, iar daca il gasesc atunci pozitionez degetul pe nodul respectiv si dau 
+return. Daca ajung la finalul listei si nu il gasesc atunci creez un nod nou de 
+tip Nod, imi pozitionez degetul pe noul nod creat si adaug "#" in nod. Daca operatia 
+este MOVE_LEFT_CHAR atunci analog scot ultimul caracter din string si il caut la 
+stanga pozitiei curente. Daca l-am gasit mut cursorul pe noua pozitie, daca am 
+ajuns la capatul listei si simbolul nu a fost gasit, atunci afisez in fisierul 
+text tema1.out ERROR. Daca operatia este INSERT_RIGHT atunci analog scot ultimul 
+caracter si creez un nod nou, alocandu-l dinamic. Mut cursorul pe aceasta pozitie 
+si adaug elementul extras. Pentru INSERT_LEFT daca nodul din stanga este diferit 
+de santinela, adica nu suntem la margine, atunci cream un nod nou, si analog mutam 
+cursorul si adaugam caracterul. Daca nodul din stanga este santinela, atunci 
+cursorul nu se muta si afisam in fisier ERROR. Dupa care eliberam variabila temp.
+
+Functia pushUndo este de tip void si are ca parametrii un pointer de tip Stiva_undo 
+si un pointer de tip Nod. Prin aceasta functie creez un nod nou in stiva si adaug 
+in acesta un pointer de tip Nod. Functia pushRedo creeaza acelasi lucru si are 
+ca parametrii un pointer de tip Stiva_redo si un pointer de tip Nod.
+
+Functiile popUndo si popRedo scot primul nod din stive. In functia undo de tip 
+void, ce are ca parametrii pointerul de tip Stiva_undo, pointerul de tip 
+Stiva_redo si pointerul de tip Banda, mai intai adaug pointerul curent 
+al stivei undo in stiva redo, modific pointerul curent din banda si dupa aceea scot 
+pointerul din stiva undo. Analog pentru functia redo, mai intai adaug pointerul 
+curent in stiva pentru undo, dupa aceea modific degetul din lista si scot 
+pointerul din stiva redo.
+
+In main am creat o santinela a listei duble, numita sentinel. Santinela si 
+nodul urmator, respectiv sentinel->next au fost alocate dinamic, iar pe primul 
+nod s-a adaugat caracterul "#". Am facut si un pointer de tip Banda pe care 
+l-am alocat dinamic si l-am legat de lista dubla si de pointerul ce imi indica 
+pozitia curenta. Am creat o coada de tip Coada si doua stive: una pentru undo, 
+una pentru redo.
+Am deschis fisierul tema1.in pentru citire si fisierul tema1.out pentru scriere. 
+Dupa aceea cu un while am citit fiecare operatie din fisier. Le-am comparat cu 
+strcmp. Daca operatia este de tip UPDATE atunci aceasta va fi adaugata in coada 
+cu operatii si in stiva pentru undo. Daca operatia este SHOW, atunci se vor afisa 
+pe loc elementele din lista cu ajutorul unui for in fisierul stabilit, iar daca 
+operatia este SHOW_CURRENT, atunci se va afisa pozitia curenta a degetului. Daca 
+operatia este EXECUTE, se va apela functia delQ. Daca operatia eliminata din 
+coada este MOVE_RIGHT atunci adaug pozitia din stanga a degetului in stiva 
+pentru undo, iar daca operatia este MOVE_LEFT atunci adaug pozitia din dreapta 
+a degetului in stiva pentru undo. Daca operatia este WRITE atunci elimin pe 
+rand toate elementele stivei cu ajutorul unui while. Pentru redo se va apela 
+functia redo, exact ca undo. 
+
+Odata ce am citit toate operatiile din fisier si am afisat banda in celalalt 
+fisier, eliberez memoria. Cu ajutorul variabilei temp, am parcurs cu un while 
+fiecare nod din lista pentru a da free si la final am eliberat santinela.
+Cu ajutorul variabilei de tip Stivanod, temps, am parcurs fiecare nod din stive 
+si l-am eliberat, dupa aceea am dat free la stive. Analog pentru coada, am 
+parcurs fiecare nod si l-am sters, iar la final am dat free la coada. De 
+asemenea, am dat free la banda si la final am inchis fisierele.
+
+Pe checker-ul local am 100 de puncte pe teste si 13 pe valgrind.
